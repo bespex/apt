@@ -6,9 +6,8 @@
 #   dists/stable/main/binary-{amd64,arm64}/Packages(.gz)
 #   be-spex-archive-keyring.{deb,gpg,asc}, bespex.gpg, index.html, state.txt
 #
-# Besides the app packages it builds its own: the keyring, the qiew metapackage
-# (qiew/) and for CodeDeck either the transitional package codeck (codeck/) or,
-# until the first release named codedeck, the old metapackage (codedeck/).
+# Besides the app packages it builds its own: the keyring and the qiew
+# metapackage (qiew/).
 #
 # Packages come from the newest $KEEP stable releases of each entry in
 # repos.json; only package names listed there are taken. A repository that
@@ -120,38 +119,11 @@ find "$root" -type d -exec chmod 755 {} +
 dpkg-deb --root-owner-group --build "$root" "$work/qiew.deb" >/dev/null
 add_to_pool "$work/qiew.deb"
 
-# 3b. CodeDeck has one name everywhere (D26): its releases bring the package
-# codedeck (program plus Recommends). Once one is here, the transitional package
-# codeck 1.0 moves earlier installs to it. Until then the old metapackage
-# codedeck (Depends: codeck) is built as before.
+# 3b. CodeDeck: its releases bring the package codedeck (the program, with the viewers it opens things
+# in as Recommends). The page names it once a release is here.
 codedeck_hint=""
 if compgen -G "$OUT/pool/main/c/codedeck/codedeck_*_amd64.deb" >/dev/null; then
-    echo "codeck (transitional)"
-    root="$work/codeck"
-    mkdir -p "$root/DEBIAN"
-    cp codeck/control "$root/DEBIAN/control"
-    find "$root" -type d -exec chmod 755 {} +
-    dpkg-deb --root-owner-group --build "$root" "$work/codeck.deb" >/dev/null
-    add_to_pool "$work/codeck.deb"
     codedeck_hint='<p>CodeDeck, with the viewers it opens things in (Marq, Dirq, Jayq):</p>\n  <pre>sudo apt install codedeck</pre>'
-elif compgen -G "$OUT/pool/main/c/codeck/*.deb" >/dev/null; then
-    echo "codedeck"
-    have=$(jq -r '.[].packages[]' repos.json)
-    for p in $(sed -n 's/^Recommends: //p' codedeck/control | tr ',' '\n' | awk '{print $1}'); do
-        if ! grep -qx "$p" <<<"$have"; then
-            echo "codedeck/control recommends $p, which repos.json does not list" >&2
-            exit 1
-        fi
-    done
-    root="$work/codedeck"
-    mkdir -p "$root/DEBIAN"
-    cp codedeck/control "$root/DEBIAN/control"
-    find "$root" -type d -exec chmod 755 {} +
-    dpkg-deb --root-owner-group --build "$root" "$work/codedeck.deb" >/dev/null
-    add_to_pool "$work/codedeck.deb"
-    codedeck_hint='<p>CodeDeck with the viewers it opens things in (Marq, Dirq, Jayq); the program alone is <code>codeck</code>:</p>\n  <pre>sudo apt install codedeck</pre>'
-else
-    echo "codedeck: skipped, codeck is not released yet"
 fi
 
 # 4. Indices and the signed Release file.
