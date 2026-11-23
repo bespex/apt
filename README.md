@@ -19,15 +19,22 @@ Add it once, then install and update the apps with `apt`. Setup instructions are
 
 ## How it works
 
-Nothing is committed here per release. [`publish.yml`](.github/workflows/publish.yml) runs every
-30 minutes (and on push or by hand), lists the newest 3 stable releases of each entry in
+Nothing is committed here per release. [`publish.yml`](.github/workflows/publish.yml) runs when an
+app's release workflow asks for it (see below), on push, by hand, and on a schedule every 30 minutes.
+GitHub runs scheduled workflows only on a best-effort basis: in practice every few hours, so the
+schedule is a fallback, not the way a release arrives. Each run lists the newest 3 stable releases of each entry in
 [`repos.json`](repos.json), and rebuilds only if their `.deb` assets changed
 ([`scripts/state.sh`](scripts/state.sh)). [`scripts/build.sh`](scripts/build.sh) then downloads the
 packages, adds the keyring package, writes the indices with `apt-ftparchive`, signs `Release`
 (`InRelease`, `Release.gpg`) and the result is deployed to GitHub Pages.
 
 - **Add an application:** a line in `repos.json` with the package names its releases contain.
-  Its release workflow only has to attach the `.deb` files to a GitHub release. A repository with
+  Its release workflow only has to attach the `.deb` files to a GitHub release.
+- **A release arrives at once** when its workflow ends with
+  `gh workflow run publish.yml -R bespex/apt`, run with the secret `APT_DISPATCH_TOKEN`: a
+  fine-grained token for `bespex/apt` with "Actions: read and write" (the workflow's own token
+  cannot start a workflow in another repository). Kept as an organisation secret, every app's
+  release can use it; without it, the release waits for the schedule. CodeDeck does this. A repository with
   several applications gets one line per application with the `tagPrefix` of its release tags
   (the newest 3 releases are then counted per application) and its `path` for the link on the page.
 - **Signing key:** RSA 4096, no expiry, fingerprint `52006D90BDB8272ED2037F6036AE9C5B18B03CC0`.
