@@ -87,10 +87,13 @@ Maintainer: Bert Speckels <skrrytch@speckels.net>
 Section: misc
 Priority: optional
 Homepage: https://bespex.run/apt/
-Description: APT source and signing key of the be-spex packages
- Adds https://bespex.run/apt to APT and installs the key that
- signs it, so the be-spex applications (Marq, Xaq, Maillet, HatRack,
- PocketTray) can be installed and updated with apt.
+Description: APT source and signing key of the be spex packages
+ Adds https://bespex.run/apt to APT and installs the key that signs it,
+ so the be spex applications (CodeDeck, the Qiew viewers, Maillet,
+ HatRack, PocketTray, Pictorix and those to come) can be installed and
+ updated with apt.
+ .
+ be spex – apps for the way you work: https://bespex.github.io
 EOF
 find "$root" -type d -exec chmod 755 {} +
 find "$root/usr" "$root/etc" -type f -exec chmod 644 {} +
@@ -140,7 +143,7 @@ apt-ftparchive \
     -o APT::FTPArchive::Release::Codename=$SUITE \
     -o "APT::FTPArchive::Release::Architectures=$ARCHS" \
     -o APT::FTPArchive::Release::Components=main \
-    -o "APT::FTPArchive::Release::Description=be-spex applications" \
+    -o "APT::FTPArchive::Release::Description=be spex applications" \
     release "$dist" > "$work/Release"
 mv "$work/Release" "$dist/Release"
 
