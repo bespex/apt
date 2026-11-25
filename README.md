@@ -13,6 +13,7 @@ Add it once, then install and update the apps with `apt`. Setup instructions are
 | `hatrack` | [bespex/HatRack](https://github.com/bespex/HatRack) (amd64, arm64) |
 | `pockettray` | [bespex/PocketTray](https://github.com/bespex/PocketTray) |
 | `pictorix` | [bespex/Pictorix](https://github.com/bespex/Pictorix) |
+| `tasqlet` | [bespex/Tasqlet](https://github.com/bespex/Tasqlet) |
 | `codedeck` | [bespex/CodeDeck](https://github.com/bespex/CodeDeck): the program, recommends Marq, Dirq, Jayq |
 | `qiew` | this repository ([`qiew/`](qiew/)): metapackage that recommends every Qiew viewer, with `qiew-setup` |
 | `be-spex-archive-keyring` | this repository: signing key and APT source |

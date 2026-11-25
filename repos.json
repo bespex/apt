@@ -11,5 +11,6 @@
   { "repo": "bespex/HatRack",    "packages": ["hatrack"] },
   { "repo": "bespex/PocketTray", "packages": ["pockettray"] },
   { "repo": "bespex/CodeDeck",   "packages": ["codedeck"] },
-  { "repo": "bespex/Pictorix",   "packages": ["pictorix"] }
+  { "repo": "bespex/Pictorix",   "packages": ["pictorix"] },
+  { "repo": "bespex/Tasqlet",    "packages": ["tasqlet"] }
 ]
